@@ -24,6 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 public class HelloApi {
@@ -65,7 +66,7 @@ public class HelloApi {
 
                String jwt = Jwts.builder()
                         .setSubject(appUser.setUsername(userInDatabase.getUsername()))
-                        .claim("role", appUser.setRole(String.valueOf(userInDatabase.getAuthorities().stream().findFirst())))
+                        .claim("role", appUser.setRole(String.valueOf(userInDatabase.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))))
                         .setIssuedAt(new Date(currentTimeMillis))
                         .setExpiration(new Date(currentTimeMillis + 2000000))
                         .signWith(signatureAlgorithm, SECRET_KEY.getBytes())

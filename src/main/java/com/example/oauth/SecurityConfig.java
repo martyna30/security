@@ -60,11 +60,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/test1").authenticated()
                 .antMatchers("/test3").hasAuthority("ROLE_ADMIN")
 
-                    //.and()
+                    .and()
                     //.
-                 .and()
-               // .addFilterAfter(new JwtFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
-                .addFilter(new JwtFilter(authenticationManager()));
+        //.and()
+             .addFilterAfter(new JwtFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
+             //.addFilter(new JwtFilter(authenticationManagerBean()));
 
         // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                /*http.authorizeRequests().antMatchers("/auth").permitAll().and()
@@ -80,6 +80,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
+    @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }

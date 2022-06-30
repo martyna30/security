@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -42,6 +43,43 @@ public class JwtFilter extends BasicAuthenticationFilter {
         if (header != null && header.startsWith("Bearer ")) {
             UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = getAuthenticationByToken(header);
             SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             chain.doFilter(request, response);
         }
     }
@@ -53,8 +91,9 @@ public class JwtFilter extends BasicAuthenticationFilter {
 
         String username = claimsJws.getBody().get("sub").toString();
         String cleimRole = claimsJws.getBody().get("role").toString();
-        cleimRole.replace("[", "").replace("]","");
-        Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(cleimRole));
+        String role = cleimRole.replace("[", "");
+        String role2= role.replace("]","");
+        Set<SimpleGrantedAuthority> simpleGrantedAuthorities = Collections.singleton(new SimpleGrantedAuthority(role2));
 
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(username, SECRET_KEY.getBytes(), simpleGrantedAuthorities);
         return usernamePasswordAuthenticationToken;
