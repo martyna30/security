@@ -4,10 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Entity
@@ -23,7 +24,13 @@ public class AppUser  {
     private String username;
     private String password;
 
-    private String role;
+    String role;
+
+    //private Collection<String>roles = new ArrayList<>();
+
+
+
+
 
 
     public Long getId() {
@@ -38,9 +45,6 @@ public class AppUser  {
     }
 
 
-    public String getRole() {
-        return role;
-    }
 
     public String setUsername(String username) {
         this.username = username;
@@ -52,13 +56,18 @@ public class AppUser  {
         return password;
     }
 
-    public String setRole(String role) {
-        this.role = role;
-        return role;
-    }
+
 
     public Long setId(Long id) {
         this.id = id;
         return id;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 }

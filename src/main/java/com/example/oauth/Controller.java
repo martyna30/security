@@ -4,30 +4,19 @@ import com.example.oauth.mapper.AppUserMapper;
 import com.example.oauth.service.UserService;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.impl.crypto.MacProvider;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.example.oauth.service.JwtService;
 
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import javax.xml.bind.DatatypeConverter;
-import java.security.Key;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @RestController
-public class HelloApi {
+public class Controller {
 
     private String SECRET_KEY = "123";
     SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
@@ -39,11 +28,13 @@ public class HelloApi {
     AppUserMapper appUserMapper;
 
 
-    @PostMapping("/auth")
+
+
+    /*@PostMapping("/auth")
     public String getToken(@RequestBody AppUser appUser) throws Exception {
 
 
-        /*//sprawdz czy istnieje w bazie user jesli tak to generujesz token
+        /*sprawdz czy istnieje w bazie user jesli tak to generujesz token
         try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(appUserDto.getUsername(), appUserDto.getPassword().getBytes()));
@@ -55,7 +46,7 @@ public class HelloApi {
 
         String jwt = jwtService.generateToken(userDetails);
         //return  ResponseEntity.ok(jwt);
-        return jwt;*/
+        return jwt;
 
         long currentTimeMillis = System.currentTimeMillis();
 
@@ -66,19 +57,17 @@ public class HelloApi {
 
                String jwt = Jwts.builder()
                         .setSubject(appUser.setUsername(userInDatabase.getUsername()))
-                        .claim("role", appUser.setRole(String.valueOf(userInDatabase.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))))
-                        .setIssuedAt(new Date(currentTimeMillis))
+                        //.claim("role", getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))))
+                       // .setIssuedAt(new Date(currentTimeMillis))
                         .setExpiration(new Date(currentTimeMillis + 2000000))
                         .signWith(signatureAlgorithm, SECRET_KEY.getBytes())
                         .compact();
-                return jwt;
+                return jwt;*/
 
 
-       // } catch (BadCredentialsException e) {
+      //} catch (BadCredentialsException e) {
            // throw new Exception("Incorrect password", e);
-       // }
-
-    }
+        //}
 
     @GetMapping("/hello")
     public String login() {

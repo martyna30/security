@@ -1,5 +1,7 @@
 package com.example.oauth;
 
+import com.example.oauth.filter.CustomAuthenticationFilter;
+import com.example.oauth.filter.CustomAuthorizationFilter;
 import com.example.oauth.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,7 +27,7 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 
 import javax.servlet.Filter;
 
-
+@EnableWebSecurity
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
@@ -48,25 +50,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
-        //CustomAuthenticationFilter customAuthenticationFilter =  new CustomAuthenticationFilter();
-
-            http.csrf().disable(); //postman
-            http.headers().disable();//h2
+        CustomAuthenticationFilter customAuthenticationFilter =  new CustomAuthenticationFilter(authenticationManagerBean());
+        customAuthenticationFilter.setFilterProcessesUrl("/login");
+        http.csrf().disable(); //postman
+        http.headers().disable();//h2
         //zmina permit autenty potem role
-       // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
+        http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+        http.authorizeRequests().antMatchers("/login/**").permitAll();
         http.authorizeRequests()
                 .antMatchers("/auth").permitAll()
-                .antMatchers("/test1").authenticated()
-                .antMatchers("/test3").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/test3").hasAnyAuthority("ROLE_ADMIN")
+                .antMatchers("/test1").authenticated();
+        //http.addFilter(new JwtFilter(authenticationManager()));
+         http.addFilter(customAuthenticationFilter);
+        //http.addFilterBefore(new JwtFilter(),UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
-                    .and()
-                    //.
-        //.and()
-             .addFilterAfter(new JwtFilter(authenticationManagerBean()), BasicAuthenticationFilter.class);
-             //.addFilter(new JwtFilter(authenticationManagerBean()));
 
-        // http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
                /*http.authorizeRequests().antMatchers("/auth").permitAll().and()
                        .authorizeRequests().antMatchers("/test2").authenticated();
                        //.and().authorizeRequests().antMatchers("/test3").hasRole("ADMIN");

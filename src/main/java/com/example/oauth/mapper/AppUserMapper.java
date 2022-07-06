@@ -13,6 +13,7 @@ public class AppUserMapper {
                 appUserDto.getPassword(),
                 appUserDto.getUsername(),
                 appUserDto.getRole()
+
         );
     }
 

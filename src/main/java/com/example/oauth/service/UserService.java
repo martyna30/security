@@ -2,14 +2,22 @@ package com.example.oauth.service;
 
 import com.example.oauth.AppUser;
 import com.example.oauth.MyUserDetails;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -28,6 +36,7 @@ public class UserService implements UserDetailsService {
         Optional<AppUser> appUser = userRepository.findByUsernameAndPassword(username, password);
         return appUser.map(MyUserDetails::new)
                 .orElseThrow(() -> new UsernameNotFoundException("User with such name doesn't exist"));
+
 
     }
 
